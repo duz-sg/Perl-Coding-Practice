@@ -53,4 +53,4 @@ sub partition
 
 my @array = ( 4, 2, 1, 5, 3 );
 qsort @array;
-print "@array\n";
+say "@array";
