@@ -5,10 +5,31 @@ use utf8;
 use feature qw(say);
 use Data::Dumper;
 
+# Count array contents
 my @names = qw( John Donald Alice Carlos Bob );
 my $count = 0;
-map  { $count++ } @names;
-grep { length $_ < 4 } @names;
-my @out = map { length($_) < 4 ? $_ : () } @names;
+map { $count++ } @names;
 say $count;
+
+
+# Find all the names longer than 4 chars
+my @out = map { length($_) < 4 ? $_ : () } @names;
 say @out;
+
+# Translates a list of numbers to their squared values.
+my @numbers = qw/ 0 1 2 3 4 5 6 7 8 9 10 65 66 67/;
+my @squares = map { $_ > 3 ? $_ * $_ : () } @numbers;
+say "@squares"; 
+# Same
+my @square2 = map { $_ * $_ } grep { $_ > 3 } @numbers;
+say "@square2"; 
+
+# Transalte numbers to characters
+my @char = map(chr, @numbers);
+say "@char";
+
+# Order names by their length, for same length, compare alphabetical
+my %hash = map { $_ => length($_) } @names;
+say Dumper \%hash;
+my @sorted = sort ( { $hash{$a} <=> $hash{$b} or $a cmp $b } keys %hash );
+say "@sorted";
