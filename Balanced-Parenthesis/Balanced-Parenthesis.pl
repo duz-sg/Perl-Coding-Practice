@@ -8,7 +8,14 @@ use Data::Dumper;
 isBalanced("a(bcd)d[");
 isBalanced("(kjds(hfkj)sd)hf");
 isBalanced("{[]}(){}");
+isBalanced("{[]}(){]");
 isBalanced("{[}]");      # This should output FALSE
+
+isBalancedStack("a(bcd)d[");
+isBalancedStack("(kjds(hfkj)sd)hf");
+isBalancedStack("{[]}(){}");
+isBalancedStack("{[]}(){]");
+isBalancedStack("{[}]");      # This should output FALSE
 
 sub isBalanced
 {
@@ -54,4 +61,30 @@ sub isBalanced
 	{
 		say "$str: False";
 	}
+}
+
+sub isBalancedStack
+{
+	my $str   = shift;
+	my @arr   = split( //, $str );
+	my @stack = ();
+	my %hash  = (
+		')' => '(',
+		']' => '[',
+		'}' => '{',
+	);
+	my $balance = 1;
+	for my $char (@arr)
+	{
+		if ( $char =~ /[\(\{\[]/ )
+		{
+			push @stack, $char;
+		}
+		if ( exists $hash{$char} )
+		{
+			$balance = pop @stack eq $hash{$char} ? 1 : 0;
+		}
+	}
+	my $result = $balance && !@stack ? 'True' : 'False';
+	say "$str: $result";
 }
