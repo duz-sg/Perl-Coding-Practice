@@ -11,7 +11,6 @@ my $count = 0;
 map { $count++ } @names;
 say $count;
 
-
 # Find all the names longer than 4 chars
 my @out = map { length($_) < 4 ? $_ : () } @names;
 say @out;
@@ -31,5 +30,13 @@ say "@char";
 # Order names by their length, for same length, compare alphabetical
 my %hash = map { $_ => length($_) } @names;
 say Dumper \%hash;
-my @sorted = sort ( { $hash{$a} <=> $hash{$b} or $a cmp $b } keys %hash );
+my @sorted = sort { $hash{$a} <=> $hash{$b} or $a cmp $b } keys %hash;
+say "@sorted";
+
+# One liner solution using Schwartzian transform
+@sorted = ();
+@sorted = 
+	map  { $_->[0] } 
+	sort { $a->[1] <=> $b->[1] or $a->[0] cmp $b->[0] } 
+	map  { [ $_ => length($_) ] } @names;
 say "@sorted";
