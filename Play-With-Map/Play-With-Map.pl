@@ -4,6 +4,8 @@ use warnings;
 use utf8;
 use feature qw(say);
 use Data::Dumper;
+use Benchmark qw(:all) ;
+ 
 
 # Count array contents
 my @names = qw( John Donald Alice Carlos Bob );
@@ -19,9 +21,21 @@ say @out;
 my @numbers = qw/ 0 1 2 3 4 5 6 7 8 9 10 65 66 67/;
 my @squares = map { $_ > 3 ? $_ * $_ : () } @numbers;
 say "@squares"; 
-# Same
+# Use grep to filter 
 my @square2 = map { $_ * $_ } grep { $_ > 3 } @numbers;
 say "@square2"; 
+
+cmpthese( 0, {
+	default => '
+		my @numbers = qw/ 0 1 2 3 4 5 6 7 8 9 10 65 66 67/;
+		my @squares = map { $_ > 3 ? $_ * $_ : () } @numbers;
+		',
+	grep => '
+		my @numbers = qw/ 0 1 2 3 4 5 6 7 8 9 10 65 66 67/;
+		my @square2 = map { $_ * $_ } grep { $_ > 3 } @numbers;
+		',
+});
+
 
 # Transalte numbers to characters
 my @char = map(chr, @numbers);
@@ -40,3 +54,16 @@ say "@sorted";
 	sort { $a->[1] <=> $b->[1] or $a->[0] cmp $b->[0] } 
 	map  { [ $_ => length($_) ] } @names;
 say "@sorted";
+
+cmpthese( 0, {
+	hash => '
+		my @names = qw( John Donald Alice Carlos Bob );
+		@sorted = 
+		map  { $_->[0] } 
+		sort { $a->[1] <=> $b->[1] or $a->[0] cmp $b->[0] } 
+		map  { [ $_ => length($_) ] } @names;',
+	array => '
+		my @names = qw( John Donald Alice Carlos Bob );
+		my %hash = map { $_ => length($_) } @names;
+		my @sorted = sort { $hash{$a} <=> $hash{$b} or $a cmp $b } keys %hash;',
+});
