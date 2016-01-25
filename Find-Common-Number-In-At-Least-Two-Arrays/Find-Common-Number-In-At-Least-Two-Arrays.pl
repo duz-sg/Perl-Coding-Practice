@@ -11,7 +11,7 @@ my @c = (9, 11, 13, 18);
 
 my $d = exists_at_least_two_of_three( \@a, \@b, \@c );
 
-for (@$d)
+for ( sort { $a <=> $b } @$d )
 {
 	say "$_";
 }
@@ -22,18 +22,18 @@ sub exists_at_least_two_of_three
 	my $hash = {};
 	for (@$a)
 	{
-		$hash->{$_} = 2;
+		$hash->{$_} = 1;
 	}
 	for (@$b)
 	{
-		$hash->{$_} = ( !$hash->{$_} || $hash->{$_} == 3  ? 3 : 5);
+		$hash->{$_} = ( !$hash->{$_} || $hash->{$_} == 2  ? 2 : 5);
 	}
 	for (@$c)
 	{
-		$hash->{$_} = ( !$hash->{$_} || $hash->{$_} == 4  ? 4 : 5);
+		$hash->{$_} = ( !$hash->{$_} || $hash->{$_} == 3  ? 3 : 5);
 	}
 	my @d;
-	for (keys %$hash)
+	for ( keys %$hash)
 	{
 		push @d, $_ if $hash->{$_} == 5;
 	}
