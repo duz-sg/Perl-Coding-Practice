@@ -6,7 +6,7 @@ use feature qw(say);
 use Data::Dumper;
 use Benchmark qw(:all) ;
  
-my @strings = qw / listen mary slam value army silent incest insect /;
+my @strings = qw / 1 2 3 4 5 6 7 8 9 /;
 say "@strings";
 shiftArrayToRightByN( \@strings, 3 );
 say "@strings";
